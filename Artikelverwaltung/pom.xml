@@ -50,11 +50,13 @@
       <groupId>jakarta.enterprise</groupId>
       <artifactId>jakarta.enterprise.cdi-api</artifactId>
       <version>3.0.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet-core</artifactId>
       <version>4.0.2.Final</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
