@@ -34,6 +34,8 @@ target
 .idea
 .DS_Store
 *.iml
+# Ignore persistence.xml because of DB Credentials
+persistence.xml
 
 # Unnecessary Eclipse project files
 .settings 
