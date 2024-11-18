@@ -48,3 +48,4 @@ VALUES
         (SELECT user_id FROM user WHERE username = 'rescuer'),
         (SELECT user_id FROM user WHERE username = 'admin'),
         NOW());
+        
