@@ -6,8 +6,8 @@
 >
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.iubh.webanwendungen</groupId>
-  <artifactId>Artikelverwaltung</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <artifactId>GhostNetFishing</artifactId>
+  <version>0.1</version>
   <packaging>war</packaging>
 
   <properties>

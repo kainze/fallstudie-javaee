@@ -3,11 +3,11 @@ import jakarta.inject.Named;
 
 @Named
 @RequestScoped
-public class Artikel
+public class GhostNet
 {
-    private String name = "Filzpantoffeln 'Rudolph'";
+    private String name = "Geisternetz0815";
 
-    public Artikel()
+    public GhostNet()
     {
     }
 
