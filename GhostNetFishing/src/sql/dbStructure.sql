@@ -4,7 +4,7 @@ USE ghost_net_fishing;
 
 -- Tabelle: user
 CREATE TABLE IF NOT EXISTS user (
-    user_id UUID PRIMARY KEY,
+    userId UUID PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(50),
@@ -12,48 +12,49 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(100) UNIQUE,
     phone VARCHAR(20),
     rescuer BOOLEAN DEFAULT FALSE,
-    user_disabled BOOLEAN DEFAULT FALSE,
-    insert_by UUID,
-    insert_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    delete_by UUID,
-    delete_date DATETIME,
-    FOREIGN KEY (insert_by) REFERENCES user (user_id),
-    FOREIGN KEY (delete_by) REFERENCES user (user_id)
+    userDisabled BOOLEAN DEFAULT FALSE,
+    insertBy UUID,
+    insertDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    deleteBy UUID,
+    deleteDate DATETIME,
+    FOREIGN KEY (insertBy) REFERENCES user (userId),
+    FOREIGN KEY (deleteBy) REFERENCES user (userId)
 );
 
 -- Tabelle: ghostnet_state
 CREATE TABLE IF NOT EXISTS ghostnet_state (
-    ghostnet_state_id UUID PRIMARY KEY,
+    ghostnetStateId UUID PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(255),
-    insert_by UUID,
-    insert_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    delete_by UUID,
-    delete_date DATETIME,
-    FOREIGN KEY (insert_by) REFERENCES user (user_id),
-    FOREIGN KEY (delete_by) REFERENCES user (user_id)
+    insertBy UUID,
+    insertDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    deleteBy UUID,
+    deleteDate DATETIME,
+    FOREIGN KEY (insertBy) REFERENCES user (userId),
+    FOREIGN KEY (deleteBy) REFERENCES user (userId)
 );
 
 -- Tabelle: ghostnet
 CREATE TABLE IF NOT EXISTS ghostnet (
-    ghostnet_id UUID PRIMARY KEY,
-    gps_latitude INT NOT NULL,
-    gps_longitude INT NOT NULL,
+    ghostnetId UUID PRIMARY KEY,
+    gpsLatitude INT NOT NULL,
+    gpsLongitude INT NOT NULL,
     size INT,
-    ghostnet_state_id UUID NOT NULL,
+    ghostnetStateId UUID NOT NULL,
     notifier UUID NOT NULL,
     rescuer UUID,
-    insert_by UUID,
-    insert_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    delete_by UUID,
-    delete_date DATETIME,
-    FOREIGN KEY (ghostnet_state_id) REFERENCES ghostnet_state (ghostnet_state_id),
+    insertBy UUID,
+    insertDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    deleteBy UUID,
+    deleteDate DATETIME,
+    FOREIGN KEY (ghostnetStateId) REFERENCES ghostnet_state (ghostnetStateId),
     FOREIGN KEY (notifier) REFERENCES user (user_id),
     FOREIGN KEY (rescuer) REFERENCES user (user_id),
-    FOREIGN KEY (insert_by) REFERENCES user (user_id),
-    FOREIGN KEY (delete_by) REFERENCES user (user_id)
+    FOREIGN KEY (insertBy) REFERENCES user (userId),
+    FOREIGN KEY (deleteBy) REFERENCES user (userId)
 );
 
+/* 
 -- Tabelle: audit_log
 CREATE TABLE IF NOT EXISTS audit_log (
     log_id UUID PRIMARY KEY,
@@ -64,4 +65,4 @@ CREATE TABLE IF NOT EXISTS audit_log (
     performed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     description TEXT,
     FOREIGN KEY (performed_by) REFERENCES user (user_id)
-);
+); */

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+  <title>Ghost Net Fishing</title>
+</h:head>
+<h:body>
+  <h:form>
+    <h:outputLabel for="name" value="State Name:" />
+    <h:inputText id="name" value="#{ghostNetStateController.ghostNetState.name}" />
+
+    <h:outputLabel for="description" value="Description:" />
+    <h:inputTextarea id="description" value="#{ghostNetStateController.ghostNetState.description}" />
+
+    <h:commandButton value="Save" action="#{ghostNetStateController.saveGhostNetState}" />
+</h:form>
+
+<h:dataTable value="#{ghostNetStateController.getGhostNetStates}" var="state">
+    <h:column>
+        <f:facet name="header">Name</f:facet>
+        #{state.name}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Description</f:facet>
+        #{state.description}
+    </h:column>
+    <h:column>
+        <h:commandButton value="Edit" action="#{ghostNetStateController.setGhostNetState(state)}" />
+        <h:commandButton value="Delete" action="#{ghostNetStateController.deleteGhostNetState(state.ghostnetStateId)}" />
+    </h:column>
+</h:dataTable>
+
+</h:body>
+</html>
+
