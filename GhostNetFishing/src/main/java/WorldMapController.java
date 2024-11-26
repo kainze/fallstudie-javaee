@@ -45,10 +45,8 @@ public class WorldMapController implements Serializable {
         StringBuilder json = new StringBuilder("[");
         for (GhostNet net : filteredGhostNets) {
             json.append("{")
-                //.append("\"gpsLatitude\":").append(net.getGpsLatitude()).append(",")
-                .append("\"gpsLatitude\":").append(34.0522).append(",")
-                //.append("\"gpsLongitude\":").append(net.getGpsLongitude()).append(",")
-                .append("\"gpsLongitude\":").append(-118.2437).append(",")
+                .append("\"gpsLatitude\":").append(net.getGpsLatitude()).append(",")
+                .append("\"gpsLongitude\":").append(net.getGpsLongitude()).append(",")
                 //.append("\"notifier\":{\"username\":\"").append(net.getNotifier().getUsername()).append("\"},")
                 .append("\"ghostnetState\":{\"name\":\"").append(net.getGhostnetState().getName()).append("\"},")
                 .append("\"size\":").append(net.getSize())

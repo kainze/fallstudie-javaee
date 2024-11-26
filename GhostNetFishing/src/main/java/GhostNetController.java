@@ -99,6 +99,9 @@ public class GhostNetController implements Serializable {
         ghostNet.setNotifier(getLoginController().getLoggedInUser());
         ghostNet.setGhostnetState(ghostNetDAO.findStateByName("Gemeldet"));
         ghostNetDAO.saveGhostNet(ghostNet);
+        System.out.println("new GhostNet Created");
+        System.out.println("Lat: " + ghostNet.getGpsLatitude());
+        System.out.println("Lon: " + ghostNet.getGpsLongitude());
         ghostNet = new GhostNet(); // Reset the form
     }
 
