@@ -1,3 +1,4 @@
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.application.NavigationHandler;
@@ -29,6 +30,10 @@ public class LoginController implements Serializable {
     // Salt for password hashing (should be stored securely)
     private static final String SALT = "vXsia8c04PhBtnG3isvjlemj7Bm6rAhBR8JRkf2z";
 
+    public LoginController() {
+        System.out.println("LoginController created");
+    }
+
     public String getUsername() {
         return username;
     }
@@ -54,8 +59,6 @@ public class LoginController implements Serializable {
     }
 
     public Users getLoggedInUser() {
-        System.out.println("LoggedIn User: " + loggedInUser);
-        System.out.println("LoggedIn Username: " + username);
         return loggedInUser;
     }
 
@@ -79,7 +82,6 @@ public class LoginController implements Serializable {
     }
     
     public String login() {
-        System.out.println("Login method called with username: " + username);
         try {
             Users user = usersDAO.findUserByCredentials(username, hashPassword(username, password, SALT));
             if (user != null) {
@@ -87,15 +89,18 @@ public class LoginController implements Serializable {
                 failureMessage = "";
                 System.out.println("Login successful: " + loggedInUser.getUsername());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Willkommen, " + username + "!"));
-                return "index.xhtml?faces-redirect=true";// Stay on the current page and update the UI
+                return "index.xhtml?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Benutzername oder Passwort falsch."));
-                return ""; // Stay on the current page
+                System.out.println("Error Username or Password Wrong");
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password + "(" + hashPassword(username, password, SALT) + ")");
+                return "";
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."));
             System.err.println("Exception occurred during login: " + e.getMessage());
-            return ""; // Stay on the current page
+            return "";
         }
     }
     

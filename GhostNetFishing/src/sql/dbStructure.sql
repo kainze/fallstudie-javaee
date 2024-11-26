@@ -59,12 +59,11 @@ CREATE TABLE IF NOT EXISTS ghostnet (
 /* 
 -- Tabelle: audit_log
 CREATE TABLE IF NOT EXISTS audit_log (
-    log_id UUID PRIMARY KEY,
+    log_id INT PRIMARY KEY,
     entity_name VARCHAR(50) NOT NULL,
-    entity_id UUID NOT NULL,
     action VARCHAR(20) NOT NULL, 
-    performed_by UUID,
-    performed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     description TEXT,
+    performed_by INT,
+    performed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (performed_by) REFERENCES user (user_id)
 ); */

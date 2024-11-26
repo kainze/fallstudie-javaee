@@ -11,9 +11,9 @@ public class GhostNet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment for integers
     private int ghostnetId;
 
-    private int gpsLatitude;
+    private double gpsLatitude;
 
-    private int gpsLongitude;
+    private double gpsLongitude;
 
     private int size;
 
@@ -45,19 +45,19 @@ public class GhostNet implements Serializable {
         this.ghostnetId = ghostnetId;
     }
 
-    public int getGpsLatitude() {
+    public double getGpsLatitude() {
         return gpsLatitude;
     }
 
-    public void setGpsLatitude(int gpsLatitude) {
+    public void setGpsLatitude(double gpsLatitude) {
         this.gpsLatitude = gpsLatitude;
     }
 
-    public int getGpsLongitude() {
+    public double getGpsLongitude() {
         return gpsLongitude;
     }
 
-    public void setGpsLongitude(int gpsLongitude) {
+    public void setGpsLongitude(double gpsLongitude) {
         this.gpsLongitude = gpsLongitude;
     }
 

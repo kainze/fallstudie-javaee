@@ -1,65 +1,131 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Ghost Net Recovery</title>
-    <!-- Include Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>World Map - Filter Ghost Nets by State</title>
+  <!-- Include Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Leaflet.js CSS and JavaScript -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet" />
 </h:head>
 
 <h:body class="container mt-5">
 
-    <!-- Navbar -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Ghost Net Recovery</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.xhtml">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="worldmap.xhtml">World Map</a>
-                </li>
-                <li class="nav-item" rendered="#{loginController.loggedInUser != null}">
-                    <a class="nav-link" href="GhostNets.xhtml">Geisternetze</a>
-                </li>
-            </ul>
+      <a class="navbar-brand" href="#">Ghost Net Recovery</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.xhtml">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="worldmap.xhtml">World Map</a>
+          </li>
+          <li class="nav-item" rendered="#{loginController.loggedInUser != null}">
+            <a class="nav-link" href="GhostNets.xhtml">Geisternetze</a>
+          </li>
+        </ul>
 
-            <!-- If logged in, show username and logout -->
-            <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
-                <span class="navbar-text me-3">
-                    Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
-                </span>
-                <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger"
-                                 update="loginForm loggedInForm" />
-            </h:form>
+        <!-- If logged in, show username and logout -->
+        <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
+          <span class="navbar-text me-3">
+            Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
+          </span>
+          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" />
+        </h:form>
 
-            <!-- If not logged in, show login fields -->
-            <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
-                <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
-                <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
-                <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
-                <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success"
-                                 process="@form" update="loginForm loggedInForm loginMessages" />
-            </h:form>
-        </div>
+        <!-- If not logged in, show login fields -->
+        <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
+          <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
+          <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
+          <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
+          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" />
+        </h:form>
+      </div>
     </div>
   </nav>
   <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
 
+  <!-- Filter Section -->
+  <h:form id="filterForm">
+    <p>Select Ghost Net States to Display:</p>
+    <p:selectManyCheckbox id="stateFilter" value="#{worldMapController.selectedStates}">
+      <f:selectItems value="#{worldMapController.availableStates}" />
+    </p:selectManyCheckbox>
+    <p:commandButton value="Update Map" actionListener="#{worldMapController.updateMap}" update="@form" />
+  </h:form>
 
-    <!-- Main Content -->
-    <h1 class="text-center mb-4">Welcome to Ghost Net Recovery</h1>
+  <!-- Map -->
+  <div id="map" style="height: 600px; width: 100%; margin-top: 20px;"></div>
 
-    TODO Create WorldMap
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([0, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Custom MDI icons for each state
+    var icons = {
+      "Gemeldet": L.divIcon({
+        html: '<i class="mdi mdi-alert-circle-outline" style="font-size: 24px; color: red;"></i>',
+        className: 'custom-icon',
+        iconSize: [32, 32]
+      }),
+      "Bergung bevorstehend": L.divIcon({
+        html: '<i class="mdi mdi-progress-clock" style="font-size: 24px; color: orange;"></i>',
+        className: 'custom-icon',
+        iconSize: [32, 32]
+      }),
+      "Verschollen": L.divIcon({
+        html: '<i class="mdi mdi-help-circle-outline" style="font-size: 24px; color: blue;"></i>',
+        className: 'custom-icon',
+        iconSize: [32, 32]
+      }),
+      "Geborgen": L.divIcon({
+        html: '<i class="mdi mdi-check-circle-outline" style="font-size: 24px; color: green;"></i>',
+        className: 'custom-icon',
+        iconSize: [32, 32]
+      })
+    };
+
+    // Function to add markers dynamically
+    function updateMap(data) {
+      // Clear existing markers
+      map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+          map.removeLayer(layer);
+        }
+      });
+
+      // Add new markers based on selected data
+      data.forEach(function (net) {
+        var marker = L.marker([net.gpsLatitude, net.gpsLongitude], {
+          icon: icons[net.ghostnetState.name] || L.Icon.Default
+        }).addTo(map);
+
+        marker.bindPopup(
+          '<b>Notifier:</b> ' + net.notifier.username + '<br></br>' +
+          '<b>State:</b> ' + net.ghostnetState.name + '<br></br>' +
+          '<b>Size:</b> ' + net.size
+        );
+      });
+    }
+
+    // Load initial data
+    var initialData = #{ worldMapController.filteredGhostNetsAsJSON };
+    updateMap(initialData);
+  </script>
 </h:body>
+
 </html>

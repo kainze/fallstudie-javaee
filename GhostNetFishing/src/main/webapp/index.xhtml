@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
-  xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
-  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
   <title>Ghost Net Recovery</title>
   <!-- Include Bootstrap -->
@@ -15,8 +13,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Ghost Net Recovery</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -29,9 +26,15 @@
           </li>
 
           <li class="nav-item">
-            <ui:fragment rendered="#{loginController.loggedInUser != null}">
-              <a class="nav-link" href="GhostNets.xhtml">Geisternetze</a>
-            </ui:fragment>
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="GhostNet.xhtml">Geisternetze</a>
+            </h:panelGroup>
+          </li>
+
+          <li class="nav-item">
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="myGhostNets.xhtml">Meine Geisternetze</a>
+            </h:panelGroup>
           </li>
         </ul>
 
@@ -40,24 +43,15 @@
           <span class="navbar-text me-3">
             Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
           </span>
-          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger"
-            update="loginForm loggedInForm" />
+          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" />
         </h:form>
 
-        <div class="container-fluid">
-          <br>
-          </br>
-        </div>
 
         <!-- If not logged in, show login fields -->
         <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
-          <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
-          <p:inputText id="username" placeholder="Username" value="#{loginController.username}"
-            styleClass="form-control me-2" />
-          <p:password id="password" placeholder="Password" value="#{loginController.password}"
-            styleClass="form-control me-2" />
-          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success"
-            process="@form" update="loginForm loggedInForm loginMessages" />
+          <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
+          <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
+          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" />
         </h:form>
       </div>
     </div>
@@ -66,10 +60,14 @@
 
   <!-- Main Content -->
   <div class="container mt-4">
-    <h:panelGroup>
-      <div class="text-center mb-4">
-        <p>Log in to get access to your personal data and manage your ghost nets.</p>
+
+    <h:panelGroup rendered="#{loginController.loggedInUser == null}">
+      <div class="alert alert-warning text-center mb-4" role="alert">
+        Log in to get access to your personal data and manage your ghost nets.
       </div>
+    </h:panelGroup>
+
+    <h:panelGroup>
       <h2 class="text-center">Statistics</h2>
       <div class="row mt-4">
         <!-- Total Ghost Nets -->
@@ -101,6 +99,11 @@
         </div>
       </div>
     </h:panelGroup>
+
+    <div class="container-fluid">
+      <br>
+      </br>
+    </div>
 
     <!-- If logged in, show personal data -->
     <h:panelGroup rendered="#{loginController.loggedInUser != null}">
@@ -134,8 +137,7 @@
     <div class="text-center mb-4">
       <h:panelGroup rendered="#{loginController.loggedInUser == null}">
         <p>Log in to get access to your personal data and manage your ghost nets.</p>
-        <p:commandButton value="Create GhostNet Anonymously" styleClass="btn btn-primary"
-          onclick="PF('createNetDialog').show()" />
+        <p:commandButton value="Create GhostNet Anonymously" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
       </h:panelGroup>
       <h:panelGroup rendered="#{loginController.loggedInUser != null}">
         <p:commandButton value="Create GhostNet" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
@@ -144,8 +146,7 @@
   </div>
 
   <!-- Create GhostNet Modal -->
-  <p:dialog header="Create Ghost Net" widgetVar="createNetDialog" modal="true" closable="true" resizable="false"
-    width="500px">
+  <p:dialog header="Create Ghost Net" widgetVar="createNetDialog" modal="true" closable="true" resizable="false" width="500px">
     <h:form id="createNetForm">
       <p:panelGrid columns="2" styleClass="form-grid">
         <p:outputLabel for="gpsLatitude" value="GPS Latitude:" />
@@ -156,8 +157,7 @@
         <p:inputText id="size" value="#{ghostNetController.ghostNet.size}" />
       </p:panelGrid>
       <div class="mt-3 text-end">
-        <p:commandButton value="Create" action="#{ghostNetController.saveGhostNet}" styleClass="btn btn-primary"
-          oncomplete="PF('createNetDialog').hide()" />
+        <p:commandButton value="Create" action="#{ghostNetController.createGhostNet}" styleClass="btn btn-primary" oncomplete="PF('createNetDialog').hide()" />
       </div>
     </h:form>
   </p:dialog>
