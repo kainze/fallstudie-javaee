@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS ghost_net_fishing;
 
+
+-- do not need that, this is created by the Application
 USE ghost_net_fishing;
 
 -- Tabelle: user

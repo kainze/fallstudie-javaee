@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>User Management</title>
+    <!-- Include Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+</h:head>
+
+<h:body class="container mt-5">
+    <h1 class="text-center mb-4">User Management</h1>
+
+    <!-- Data Table -->
+    <p:dataTable value="#{usersController.allUsers}" var="user"
+                 paginator="true" rows="10" rowsPerPageTemplate="5,10,20"
+                 responsiveLayout="scroll"
+                 styleClass="table table-striped table-hover table-bordered">
+
+        <p:column headerText="ID">
+            <h:outputText value="#{user.userId}" />
+        </p:column>
+
+        <p:column headerText="Username">
+            <h:outputText value="#{user.username}" />
+        </p:column>
+
+        <p:column headerText="Password">
+            <h:outputText value="#{user.password}" />
+        </p:column>
+
+        <p:column headerText="First Name">
+            <h:outputText value="#{user.firstname}" />
+        </p:column>
+
+        <p:column headerText="Last Name">
+            <h:outputText value="#{user.lastname}" />
+        </p:column>
+
+        <p:column headerText="Email">
+            <h:outputText value="#{user.email}" />
+        </p:column>
+
+        <p:column headerText="Phone">
+            <h:outputText value="#{user.phone}" />
+        </p:column>
+
+        <p:column headerText="Rescuer">
+            <h:outputText value="#{user.rescuer ? 'Yes' : 'No'}" />
+        </p:column>
+
+        <p:column headerText="Disabled">
+            <h:outputText value="#{user.userDisabled ? 'Yes' : 'No'}" />
+        </p:column>
+
+        <p:column headerText="Inserted By">
+            <h:outputText value="#{user.insertBy != null ? user.insertBy.username : 'N/A'}" />
+        </p:column>
+
+        <p:column headerText="Insert Date">
+            <h:outputText value="#{user.insertDate}">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="Deleted By">
+            <h:outputText value="#{user.deleteBy != null ? user.deleteBy.username : 'N/A'}" />
+        </p:column>
+
+        <p:column headerText="Delete Date">
+            <h:outputText value="#{user.deleteDate}">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+            </h:outputText>
+        </p:column>
+
+    </p:dataTable>
+</h:body>
+</html>

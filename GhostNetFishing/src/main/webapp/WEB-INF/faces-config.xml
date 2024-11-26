@@ -4,6 +4,10 @@
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
               https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
  <application>
+    <context-param>
+      <param-name>primefaces.theme</param-name>
+      <param-value>bootstrap</param-value>
+    </context-param>
     <message-bundle>nachrichten</message-bundle>
   </application>
 </faces-config>

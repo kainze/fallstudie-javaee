@@ -65,7 +65,6 @@ public class LoginController implements Serializable {
             NavigationHandler nh = fc.getApplication().getNavigationHandler();
             nh.handleNavigation(fc, null, "login.xhtml?faces-redirect=true");
         }
-
     }
 
     public String logout() {
