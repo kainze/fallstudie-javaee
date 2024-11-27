@@ -78,7 +78,7 @@ public class LoginController implements Serializable {
         username = null;
         password = null;
         System.out.println("User Logged Out");
-        return "index.xhtml?faces-redirect=true"; // Redirect to the login page
+        return "";
     }
     
     public String login() {
@@ -89,13 +89,13 @@ public class LoginController implements Serializable {
                 failureMessage = "";
                 System.out.println("Login successful: " + loggedInUser.getUsername());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Willkommen, " + username + "!"));
-                return "index.xhtml?faces-redirect=true";
+                return "";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Benutzername oder Passwort falsch."));
                 System.out.println("Error Username or Password Wrong");
                 System.out.println("Username: " + username);
                 System.out.println("Password: " + password + "(" + hashPassword(username, password, SALT) + ")");
-                return "";
+                return "?faces-redirect=true";
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."));

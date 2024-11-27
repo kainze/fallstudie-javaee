@@ -9,58 +9,86 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
 </h:head>
 
 <h:body class="container mt-5">
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Ghost Net Recovery</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="index.xhtml">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="worldmap.xhtml">World Map</a>
-          </li>
-          <li class="nav-item" rendered="#{loginController.loggedInUser != null}">
-            <a class="nav-link" href="GhostNets.xhtml">Geisternetze</a>
-          </li>
-        </ul>
-
-        <!-- If logged in, show username and logout -->
-        <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
-          <span class="navbar-text me-3">
-            Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
-          </span>
-          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" />
-        </h:form>
-
-        <!-- If not logged in, show login fields -->
-        <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
-          <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
-          <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
-          <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
-          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" />
-        </h:form>
-      </div>
-    </div>
-  </nav>
-  <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Shea Sepherd</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.xhtml">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="worldmap.xhtml">Weltkarte</a>
+              </li>
+    
+              <li class="nav-item">
+                <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+                  <a class="nav-link" href="GhostNet.xhtml">Alle Geisternetze</a>
+                </h:panelGroup>
+              </li>
+    
+              <li class="nav-item">
+                <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+                  <a class="nav-link" href="myGhostNets.xhtml">Meine Geisternetze</a>
+                </h:panelGroup>
+              </li>
+    
+              <li class="nav-item">
+                <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+                  <a class="nav-link" href="Users.xhtml">Benutzer</a>
+                </h:panelGroup>
+              </li>
+            </ul>
+    
+            <!-- If logged in, show username and logout -->
+            <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
+              <span class="navbar-text me-3">
+                Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
+              </span>
+              <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" oncomplete="location.reload();"/>
+            </h:form>
+    
+    
+            <!-- If not logged in, show login fields -->
+            <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
+              <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
+              <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
+              <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" oncomplete="location.reload();"/>
+            </h:form>
+          </div>
+        </div>
+      </nav>
+      <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
+    
 
   <!-- Filter Section -->
-  <h:form id="filterForm">
-    <p>Select Ghost Net States to Display:</p>
-    <p:selectManyCheckbox id="stateFilter" value="#{worldMapController.selectedStates}">
-      <f:selectItems value="#{worldMapController.availableStates}" />
-    </p:selectManyCheckbox>
-    <p:commandButton value="Update Map" actionListener="#{worldMapController.updateMap}" update="@form" />
+
+  <h:form id="filterForm" class="container mt-3">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <label class="form-label">Wähle Filter für die Geisternetze:</label>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <p:selectManyCheckbox id="stateFilter" value="#{worldMapController.selectedStates}">
+          <f:selectItems value="#{worldMapController.availableStates}" var="state" itemLabel="#{state}" itemValue="#{state}" />
+        </p:selectManyCheckbox>
+      </div>
+      <div class="col-auto">
+        <p:commandButton value="Karte Aktualisieren" actionListener="#{worldMapController.updateMap}" update="@form" oncomplete="location.reload();" />
+      </div>
+    </div>
   </h:form>
+
 
   <!-- Map -->
   <div id="map" style="height: 600px; width: 100%; margin-top: 20px;"></div>
@@ -101,6 +129,7 @@
 
     // Function to add markers dynamically
     function updateMap(data) {
+      console.log("Updating Map . . .");
       // Clear existing markers
       map.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
@@ -115,9 +144,8 @@
         }).addTo(map);
 
         marker.bindPopup(
-          '<b>Notifier:</b> ' + net.notifier.username + '<br></br>' +
-          '<b>State:</b> ' + net.ghostnetState.name + '<br></br>' +
-          '<b>Size:</b> ' + net.size
+          '<b>Status:</b> ' + net.ghostnetState.name + '<br></br>' +
+          '<b>Größe:</b> ' + net.size
         );
       });
     }

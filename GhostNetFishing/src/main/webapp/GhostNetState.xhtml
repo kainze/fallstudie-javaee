@@ -5,60 +5,66 @@
 <h:head>
     <title>Ghost Net State Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
 </h:head>
 
 <h:body class="container mt-5">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Shea Sepherd</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.xhtml">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="worldmap.xhtml">Weltkarte</a>
+          </li>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Ghost Net Recovery</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.xhtml">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="worldmap.xhtml">World Map</a>
-                    </li>
+          <li class="nav-item">
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="GhostNet.xhtml">Alle Geisternetze</a>
+            </h:panelGroup>
+          </li>
 
-                    <li class="nav-item">
-                        <h:panelGroup rendered="#{loginController.loggedInUser != null}">
-                            <a class="nav-link" href="GhostNet.xhtml">Geisternetze</a>
-                        </h:panelGroup>
-                    </li>
+          <li class="nav-item">
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="myGhostNets.xhtml">Meine Geisternetze</a>
+            </h:panelGroup>
+          </li>
 
-                    <li class="nav-item">
-                        <h:panelGroup rendered="#{loginController.loggedInUser != null}">
-                            <a class="nav-link" href="myGhostNets.xhtml">Meine Geisternetze</a>
-                        </h:panelGroup>
-                    </li>
-                </ul>
+          <li class="nav-item">
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="Users.xhtml">Benutzer</a>
+            </h:panelGroup>
+          </li>
+        </ul>
 
-                <!-- If logged in, show username and logout -->
-                <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
-                    <span class="navbar-text me-3">
-                        Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
-                    </span>
-                    <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" />
-                </h:form>
+        <!-- If logged in, show username and logout -->
+        <h:form class="d-flex" id="loggedInForm" rendered="#{loginController.loggedInUser != null}">
+          <span class="navbar-text me-3">
+            Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
+          </span>
+          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" oncomplete="location.reload();"/>
+        </h:form>
 
 
-                <!-- If not logged in, show login fields -->
-                <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
-                    <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
-                    <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
-                    <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" />
-                </h:form>
-            </div>
-        </div>
-    </nav>
-    <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
+        <!-- If not logged in, show login fields -->
+        <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
+          <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
+          <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
+          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" oncomplete="location.reload();"/>
+        </h:form>
+      </div>
+    </div>
+  </nav>
+  <p:messages id="loginMessages" autoUpdate="true" showDetail="true" />
 
-    <p:dataTable value="#{ghostNetStateController.ghostNetStates}" var="state" paginator="true" rows="10" rowsPerPageTemplate="5,10,20" responsiveLayout="scroll" styleClass="table table-striped table-hover table-bordered">
+    <p:dataTable value="#{ghostNetStateController.ghostNetStates}" var="state" paginator="true" rows="20" rowsPerPageTemplate="10,20,50" responsiveLayout="scroll" styleClass="table table-striped table-hover" paginatorPosition="bottom" rendered="#{loginController.loggedInUser != null}">
 
         <p:column headerText="ID">
             <h:outputText value="#{state.ghostnetStateId}" />

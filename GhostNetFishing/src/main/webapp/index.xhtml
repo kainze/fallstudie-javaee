@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
-  <title>Ghost Net Recovery</title>
+  <title>Shea Sepherd</title>
   <!-- Include Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Leaflet.js CSS and JavaScript -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
 </h:head>
 
 <h:body class="container mt-5">
@@ -16,7 +17,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Ghost Net Recovery</a>
+      <a class="navbar-brand" href="#">Shea Sepherd</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -26,18 +27,24 @@
             <a class="nav-link" href="index.xhtml">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="worldmap.xhtml">World Map</a>
+            <a class="nav-link" href="worldmap.xhtml">Weltkarte</a>
           </li>
 
           <li class="nav-item">
             <h:panelGroup rendered="#{loginController.loggedInUser != null}">
-              <a class="nav-link" href="GhostNet.xhtml">Geisternetze</a>
+              <a class="nav-link" href="GhostNet.xhtml">Alle Geisternetze</a>
             </h:panelGroup>
           </li>
 
           <li class="nav-item">
             <h:panelGroup rendered="#{loginController.loggedInUser != null}">
               <a class="nav-link" href="myGhostNets.xhtml">Meine Geisternetze</a>
+            </h:panelGroup>
+          </li>
+
+          <li class="nav-item">
+            <h:panelGroup rendered="#{loginController.loggedInUser != null}">
+              <a class="nav-link" href="Users.xhtml">Benutzer</a>
             </h:panelGroup>
           </li>
         </ul>
@@ -47,7 +54,7 @@
           <span class="navbar-text me-3">
             Logged in as: <strong>#{loginController.loggedInUser.username}</strong>
           </span>
-          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" />
+          <p:commandButton value="Logout" action="#{loginController.logout}" styleClass="btn btn-outline-danger" update="loginForm loggedInForm" oncomplete="location.reload();"/>
         </h:form>
 
 
@@ -55,7 +62,7 @@
         <h:form class="d-flex" id="loginForm" rendered="#{loginController.loggedInUser == null}">
           <p:inputText id="username" placeholder="Username" value="#{loginController.username}" styleClass="form-control me-2" />
           <p:password id="password" placeholder="Password" value="#{loginController.password}" styleClass="form-control me-2" />
-          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" />
+          <p:commandButton value="Login" action="#{loginController.login}" styleClass="btn btn-outline-success" process="@form" update="loginForm loggedInForm loginMessages" oncomplete="location.reload();"/>
         </h:form>
       </div>
     </div>
@@ -67,7 +74,7 @@
 
     <h:panelGroup rendered="#{loginController.loggedInUser == null}">
       <div class="alert alert-warning text-center mb-4" role="alert">
-        Log in to get access to your personal data and manage your ghost nets.
+        Bitte Loggen Sie sich ein um vollen Zugriff auf ihre Geisternetze zu bekommen.
       </div>
     </h:panelGroup>
 
@@ -78,7 +85,7 @@
         <div class="col-md-4">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">Total Ghost Nets</h5>
+              <h5 class="card-title">Geisternetze insgesamt</h5>
               <p class="card-text display-6">#{statisticsController.totalGhostNets}</p>
             </div>
           </div>
@@ -87,7 +94,7 @@
         <div class="col-md-4">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">Recovered Ghost Nets</h5>
+              <h5 class="card-title">Geborgene Geisternetze</h5>
               <p class="card-text display-6">#{statisticsController.recoveredGhostNets}</p>
             </div>
           </div>
@@ -96,7 +103,7 @@
         <div class="col-md-4">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">Lost Ghost Nets</h5>
+              <h5 class="card-title">Verschollene Geisternetze</h5>
               <p class="card-text display-6">#{statisticsController.lostGhostNets}</p>
             </div>
           </div>
@@ -113,7 +120,7 @@
     <h:panelGroup rendered="#{loginController.loggedInUser != null}">
       <div class="card mb-5">
         <div class="card-header">
-          <h2 class="mb-0">Your Personal Data</h2>
+          <h2 class="mb-0">Persönliche Informationen</h2>
         </div>
         <div class="card-body">
           <ul class="list-group">
@@ -121,17 +128,17 @@
               <strong>Username:</strong> #{loginController.loggedInUser.username}
             </li>
             <li class="list-group-item">
-              <strong>First Name:</strong> #{loginController.loggedInUser.firstname}
+              <strong>Vorname:</strong> #{loginController.loggedInUser.firstname}
             </li>
             <li class="list-group-item">
-              <strong>Last Name:</strong> #{loginController.loggedInUser.lastname}
+              <strong>Nachname:</strong> #{loginController.loggedInUser.lastname}
             </li>
             <li class="list-group-item">
               <strong>Email:</strong> #{loginController.loggedInUser.email}
             </li>
             <li class="list-group-item">
-              <strong>Rescuer:</strong>
-              #{loginController.loggedInUser.rescuer ? 'Yes' : 'No'}
+              <strong>Bergende Person:</strong>
+              #{loginController.loggedInUser.rescuer ? 'Ja' : 'Nein'}
             </li>
           </ul>
         </div>
@@ -140,78 +147,84 @@
 
     <div class="text-center mb-4">
       <h:panelGroup rendered="#{loginController.loggedInUser == null}">
-        <p>Log in to get access to your personal data and manage your ghost nets.</p>
-        <p:commandButton value="Create GhostNet Anonymously" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
+        <p:commandButton value="Melde Geisternetz Anonym" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
       </h:panelGroup>
       <h:panelGroup rendered="#{loginController.loggedInUser != null}">
-        <p:commandButton value="Create GhostNet" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
+        <p:commandButton value="Melde Geisternetz" styleClass="btn btn-primary" onclick="PF('createNetDialog').show()" />
       </h:panelGroup>
     </div>
   </div>
 
   <!-- Create GhostNet Modal -->
-  <p:dialog header="Create Ghost Net" widgetVar="createNetDialog" modal="true" closable="true" resizable="false" width="700px">
+  <p:dialog header="Create Ghost Net" widgetVar="createNetDialog" modal="true" closable="true" resizable="false" width="700px" onShow="refreshMap()">
     <h:form id="createNetForm">
-      <!-- Display Selected Coordinates -->
       <p:panelGrid columns="2" styleClass="form-grid">
-        <p:outputLabel value="Size:" />
+        <p:outputLabel value="Größe:" />
         <p:inputText id="size" value="#{ghostNetController.ghostNet.size}" required="true" />
-        <p:outputLabel value="Selected Latitude:" />
-        <p:inputText id="gpsLatitude" value="#{ghostNetController.ghostNet.gpsLatitude}" disabled="true" />
-        <p:outputLabel value="Selected Longitude:" />
-        <p:inputText id="gpsLongitude" value="#{ghostNetController.ghostNet.gpsLongitude}" disabled="true" />
-      </p:panelGrid>
 
+        <p:outputLabel value="Latitude:" />
+        <p:inputText id="gpsLatitude" value="#{ghostNetController.ghostNet.gpsLatitude}" />
+
+        <p:outputLabel value="Longitude:" />
+        <p:inputText id="gpsLongitude" value="#{ghostNetController.ghostNet.gpsLongitude}" />
+      </p:panelGrid>
 
       <!-- Map for selecting coordinates -->
       <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
 
       <!-- Create Button -->
       <div class="mt-3 text-end">
-        <p:commandButton value="Create" action="#{ghostNetController.createGhostNet}" styleClass="btn btn-primary" oncomplete="PF('createNetDialog').hide()" process="@form" update="@form" />
+        <p:commandButton value="Create" action="#{ghostNetController.createGhostNet}" process="@form" styleClass="btn btn-primary" oncomplete="PF('createNetDialog').hide(); location.reload();" />
       </div>
     </h:form>
   </p:dialog>
 
+
   <script>
-    // Initialize the map
-    var map = L.map('map').setView([0, 0], 2); // Centered at [0, 0], zoom level 2
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Marker to show the selected location
+    // Declare map and marker variables
+    var map;
     var selectedMarker;
 
-    // Handle map click to select coordinates
-    map.on('click', function (e) {
-      var lat = e.latlng.lat.toFixed(6);
-      var lng = e.latlng.lng.toFixed(6);
+    // Initialize the map
+    function initializeMap() {
+      map = L.map('map').setView([0, 0], 2); // Centered at [0, 0], zoom level 2
 
-      // Update the marker
-      if (selectedMarker) {
-        selectedMarker.setLatLng(e.latlng);
-      } else {
-        selectedMarker = L.marker(e.latlng).addTo(map);
-      }
+      // Add OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
 
-      // Update the coordinates in the form
-      document.getElementById('createNetForm:gpsLatitude').value = lat;
-      document.getElementById('createNetForm:gpsLongitude').value = lng;
+      // Handle map click to select coordinates
+      map.on('click', function (e) {
+        var lat = e.latlng.lat.toFixed(6);
+        var lng = e.latlng.lng.toFixed(6);
 
-      // Update the backend bean values
-      PrimeFaces.ab({
-        source: 'createNetForm',
-        process: 'createNetForm',
-        params: {
-          'ghostNetController.ghostNet.gpsLatitude': lat,
-          'ghostNetController.ghostNet.gpsLongitude': lng
+        // Update the marker
+        if (selectedMarker) {
+          selectedMarker.setLatLng(e.latlng);
+        } else {
+          selectedMarker = L.marker(e.latlng).addTo(map);
         }
+
+        // Update the coordinates in the form
+        document.getElementById('createNetForm:gpsLatitude').value = lat;
+        document.getElementById('createNetForm:gpsLongitude').value = lng;
       });
+    }
+
+    // Refresh the map on dialog open
+    function refreshMap() {
+      setTimeout(function () {
+        map.invalidateSize(); // Refresh map dimensions
+      }, 200); // Allow the modal to render fully before refreshing
+    }
+
+    // Initialize the map on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      initializeMap();
     });
+
   </script>
 
 

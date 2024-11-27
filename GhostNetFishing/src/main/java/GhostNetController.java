@@ -23,7 +23,6 @@ public class GhostNetController implements Serializable {
 
     public GhostNetController() {
         // Default no-arg constructor
-        System.out.println("GhostNetController created");
     }
 
     public LoginController getLoginController() {
@@ -64,17 +63,15 @@ public class GhostNetController implements Serializable {
     }
 
     // Mark a ghost net as recovered
-    public String markAsRecovered(GhostNet net) {
+    public void markAsRecovered(GhostNet net) {
         net.setGhostnetState(ghostNetDAO.findStateByName("Geborgen"));
         ghostNetDAO.updateGhostNet(net);
-        return "";
     }
 
     // Mark a ghost net as lost
-    public String markAsLost(GhostNet net) {
+    public void markAsLost(GhostNet net) {
         net.setGhostnetState(ghostNetDAO.findStateByName("Verschollen"));
         ghostNetDAO.updateGhostNet(net);
-        return "";
     }
 
     // Fetch ghost nets with state "Bergung bevorstehend" not assigned to the
@@ -85,13 +82,8 @@ public class GhostNetController implements Serializable {
     }
 
     // Request assignment for a ghost net
-    public String requestAssignment(GhostNet net) {
-        // Logic to handle requesting assignment (e.g., notification to the current
-        // rescuer)
-        // Placeholder: Example of changing state to "Requested"
-        net.setGhostnetState(ghostNetDAO.findStateByName("Requested Assignment"));
-        ghostNetDAO.updateGhostNet(net);
-        return "";
+    public void requestAssignment(GhostNet net) {
+        ghostNet.setNotifier(getLoginController().getLoggedInUser());
     }
 
     public void createGhostNet() {
@@ -99,9 +91,6 @@ public class GhostNetController implements Serializable {
         ghostNet.setNotifier(getLoginController().getLoggedInUser());
         ghostNet.setGhostnetState(ghostNetDAO.findStateByName("Gemeldet"));
         ghostNetDAO.saveGhostNet(ghostNet);
-        System.out.println("new GhostNet Created");
-        System.out.println("Lat: " + ghostNet.getGpsLatitude());
-        System.out.println("Lon: " + ghostNet.getGpsLongitude());
         ghostNet = new GhostNet(); // Reset the form
     }
 

@@ -55,15 +55,3 @@ CREATE TABLE IF NOT EXISTS ghostnet (
     FOREIGN KEY (insertBy) REFERENCES user (userId),
     FOREIGN KEY (deleteBy) REFERENCES user (userId)
 );
-
-/* 
--- Tabelle: audit_log
-CREATE TABLE IF NOT EXISTS audit_log (
-    log_id INT PRIMARY KEY,
-    entity_name VARCHAR(50) NOT NULL,
-    action VARCHAR(20) NOT NULL, 
-    description TEXT,
-    performed_by INT,
-    performed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (performed_by) REFERENCES user (user_id)
-); */
